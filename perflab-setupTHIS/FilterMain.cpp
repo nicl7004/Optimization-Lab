@@ -100,11 +100,16 @@ applyFilter(struct Filter *filter, cs1300bmp *input, cs1300bmp *output)
 
   //moved the below line out of the for loops, noticed small increase in performance
   int x = filter -> getSize();
+  int height = (input -> height) -1;
+  int width = (input ->width)-1;
+  int divisor = filter ->getDivisor();
 
 
-    for(int col = 1; col < (input -> width) - 1; col = col + 1) {
-     for(int row = 1; row < (input -> height) - 1 ; row = row + 1) {
-      for(int plane = 0; plane < 3; plane++) {
+
+    for(int col = 1; col < (width); col = col + 1) {
+    for(int plane = 0; plane < 3; plane++) {
+     for(int row = 1; row < (height); row = row + 1) {
+
 	      int value = 0;
           for (int j = 0; j < x; j+=1) {
 	           for (int i = 0; i < x; i+=1) {
@@ -113,7 +118,7 @@ applyFilter(struct Filter *filter, cs1300bmp *input, cs1300bmp *output)
     	  }
 	}
 
-	value = value / filter -> getDivisor();
+	value = value / divisor;
 	if ( value  < 0 ) { value = 0; }
 	if ( value  > 255 ) { value = 255; }
 	output -> color[col][plane][row] = value;
