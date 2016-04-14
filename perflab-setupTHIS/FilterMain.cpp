@@ -117,8 +117,12 @@ applyFilter(struct Filter *filter, cs1300bmp *input, cs1300bmp *output)
 
     	  }
 	}
-
-	value = value / divisor;
+	switch(divisor){
+		case 16 : //got this fromm the .filter files
+			value = value >> 4;
+		default :
+			break;
+		}
 	if ( value  < 0 ) { value = 0; }
 	if ( value  > 255 ) { value = 255; }
 	output -> color[col][plane][row] = value;
