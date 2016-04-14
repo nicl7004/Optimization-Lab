@@ -99,7 +99,7 @@ applyFilter(struct Filter *filter, cs1300bmp *input, cs1300bmp *output)
   output -> height = input -> height;
 
   //moved the below line out of the for loops, noticed small increase in performance
-  int x = filter -> getSize();
+  int getsize = filter -> getSize();
   int height = (input -> height) -1;
   int width = (input ->width)-1;
   int divisor = filter ->getDivisor();
@@ -111,9 +111,9 @@ applyFilter(struct Filter *filter, cs1300bmp *input, cs1300bmp *output)
      for(int row = 1; row < (height); row = row + 1) {
 
 	      int value = 0;
-          for (int j = 0; j < x; j+=1) {
-	           for (int i = 0; i < x; i+=1) {
-               value = value +  input -> color[col + j - 1][plane][row + i - 1] * filter -> data[i * x + j];
+          for (int j = 0; j < getsize; j+=1) {
+	           for (int i = 0; i < getsize; i+=1) {
+               value = value +  input -> color[col + j - 1][plane][row + i - 1] * filter -> data[i * getsize + j];
 
     	  }
 	}
@@ -123,8 +123,11 @@ applyFilter(struct Filter *filter, cs1300bmp *input, cs1300bmp *output)
 		default :
 			break;
 		}
-	if ( value  < 0 ) { value = 0; }
-	if ( value  > 255 ) { value = 255; }
+	
+	value = (value < 0) ? 0:value; //single line if-statments 
+	value = (value > 255) ? 255:value;
+	//if ( value  < 0 ) { value = 0; }
+	//if ( value  > 255 ) { value = 255; }
 	output -> color[col][plane][row] = value;
       }
     }
