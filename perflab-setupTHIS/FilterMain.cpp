@@ -104,8 +104,7 @@ applyFilter(struct Filter *filter, cs1300bmp *input, cs1300bmp *output)
   int width = (input ->width)-1;
   int divisor = filter ->getDivisor();
 
-
-
+	//got rid of plane loop and pasted code three times.
     for(int col = 1; col < (width); col = col + 1) {
      for(int row = 1; row < (height); row = row + 1) {
           int value = 0;

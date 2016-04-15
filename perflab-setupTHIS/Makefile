@@ -2,8 +2,7 @@
 ##
 
 CXX	=g++
-CXXFLAGS= -m32 -static -o2
-
+CXXFLAGS= -m64 -Os -o2 -fopenmp -funroll-loops   ##get rid of static. Add -os -0s -fopenmp -funrol
 goals: judge
 	echo "Done"
 
