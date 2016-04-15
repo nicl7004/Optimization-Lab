@@ -107,13 +107,11 @@ applyFilter(struct Filter *filter, cs1300bmp *input, cs1300bmp *output)
 
 
     for(int col = 1; col < (width); col = col + 1) {
-    for(int plane = 0; plane < 3; plane++) {
      for(int row = 1; row < (height); row = row + 1) {
-
-	      int value = 0;
+          int value = 0;
           for (int j = 0; j < getsize; j+=1) {
 	           for (int i = 0; i < getsize; i+=1) {
-               value = value +  input -> color[col + j - 1][plane][row + i - 1] * filter -> data[i * getsize + j];
+               value = value +  input -> color[col + j - 1][0][row + i - 1] * filter -> data[i * getsize + j];
 
     	  }
 	}
@@ -126,11 +124,46 @@ applyFilter(struct Filter *filter, cs1300bmp *input, cs1300bmp *output)
 	
 	value = (value < 0) ? 0:value; //single line if-statments 
 	value = (value > 255) ? 255:value;
-	//if ( value  < 0 ) { value = 0; }
-	//if ( value  > 255 ) { value = 255; }
-	output -> color[col][plane][row] = value;
+	output -> color[col][0][row] = value;
       }
-    }
+      for(int row = 1; row < (height); row = row + 1) {
+           int value = 0;
+          for (int j = 0; j < getsize; j+=1) {
+	           for (int i = 0; i < getsize; i+=1) {
+               value = value +  input -> color[col + j - 1][1][row + i - 1] * filter -> data[i * getsize + j];
+
+    	  }
+	}
+	switch(divisor){
+		case 16 : //got this fromm the .filter files
+			value = value >> 4;
+		default :
+			break;
+		}
+	
+	value = (value < 0) ? 0:value; //single line if-statments 
+	value = (value > 255) ? 255:value;
+	output -> color[col][1][row] = value;
+      }
+      for(int row = 1; row < (height); row = row + 1) {
+			int value = 0;
+          for (int j = 0; j < getsize; j+=1) {
+	           for (int i = 0; i < getsize; i+=1) {
+               value = value +  input -> color[col + j - 1][2][row + i - 1] * filter -> data[i * getsize + j];
+
+    	  }
+	}
+	switch(divisor){
+		case 16 : //got this fromm the .filter files
+			value = value >> 4;
+		default :
+			break;
+		}
+	
+	value = (value < 0) ? 0:value; //single line if-statments 
+	value = (value > 255) ? 255:value;
+	output -> color[col][2][row] = value;
+      }
   }
 
   cycStop = rdtscll();
